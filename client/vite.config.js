@@ -7,13 +7,12 @@ globalThis.crypto = crypto
 
 export default defineConfig({
   plugins: [react()],
-  optimizeDeps: {
-    esbuildOptions: {
-      define: {
-        global: 'globalThis'
-      }
+  server:{
+    proxy:{
+      '/api':'http://localhost:5000',
     }
   }
+  
 })
 
 
