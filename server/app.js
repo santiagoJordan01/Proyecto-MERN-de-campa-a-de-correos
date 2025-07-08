@@ -17,7 +17,6 @@ import { ExpressAdapter } from '@bull-board/express';
 
 import { PORT } from './config.js';
 import emailRoutes from '../routes/email.routes.js';
-import routes from './routes/index.js'; 
 import path from 'path';
 import { fileURLToPath } from 'url';
 config();
