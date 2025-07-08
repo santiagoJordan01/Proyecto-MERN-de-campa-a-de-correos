@@ -17,7 +17,9 @@ import { ExpressAdapter } from '@bull-board/express';
 
 import { PORT } from './config.js';
 import emailRoutes from '../routes/email.routes.js';
-
+import routes from './routes/index.js'; 
+import path from 'path';
+import { fileURLToPath } from 'url';
 config();
 
 const app = express();
@@ -57,6 +59,22 @@ app.get('/', (req, res) => {
     }
   });
 });
+
+// ----------------------
+// Configurar para servir React en producción
+// ----------------------
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const clientPath = path.join(__dirname, '..', 'client', 'dist');
+app.use(express.static(clientPath));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(clientPath, 'index.html'));
+});
+
+// ----------------------
 
 app.listen(PORT, () => {
   console.log(`🚀 Servidor ejecutándose en http://localhost:${PORT}`);
