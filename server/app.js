@@ -46,18 +46,6 @@ createBullBoard({
 
 app.use('/admin/queues', serverAdapter.getRouter());
 
-// Rutas
-app.use('/api/emails', emailRoutes);
-
-app.get('/', (req, res) => {
-  res.json({
-    message: 'API funcionando',
-    endpoints: {
-      monitor: 'GET /admin/queues',
-      sendCampaign: 'POST /api/send-campaign'
-    }
-  });
-});
 
 // ----------------------
 // Configurar para servir React en producción
