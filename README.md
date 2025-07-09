@@ -70,6 +70,9 @@ MAILJET_SECRET_KEY=TU_SECRET_KEY
 ```bash
 npm run dev
 ```
+#### Nota:
+Es necesario ejecutar el modulo "node workers/email.worker.js" para activar las funciones de bull
+
 
 #### Para producción (con build):
 

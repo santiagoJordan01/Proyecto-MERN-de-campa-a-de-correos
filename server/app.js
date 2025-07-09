@@ -6,7 +6,7 @@ import Bull from 'bull';
 
 import bullBoardApi from '@bull-board/api';
 
-
+import("../workers/email.worker.js");
 
 import { createBullBoard } from '@bull-board/api';
 import { BullAdapter } from '@bull-board/api/bullAdapter.js';
