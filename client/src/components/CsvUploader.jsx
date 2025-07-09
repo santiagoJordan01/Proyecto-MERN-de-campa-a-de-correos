@@ -15,9 +15,7 @@ export function CsvUploader() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/emails/upload-csv",
-        formData
-      );
+      `${import.meta.env.VITE_API_URL}/api/emails/upload-csv`, formData);
       alert("Correos cargados correctamente");
     } catch (error) {
       alert("Error al cargar el archivo CSV");
