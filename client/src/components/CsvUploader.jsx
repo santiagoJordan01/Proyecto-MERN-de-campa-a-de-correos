@@ -13,7 +13,7 @@ export function CsvUploader() {
     formData.append("csv", file);
 
     try {
-      const response = await api.post(`/api/emails/upload-csv`, formData, {
+      const response = await api.post(`/emails/upload-csv`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
