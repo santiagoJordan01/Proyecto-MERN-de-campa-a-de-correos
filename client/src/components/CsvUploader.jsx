@@ -15,7 +15,7 @@ export function CsvUploader() {
     formData.append("csv", file);
 
     try {
-      const response = await axios.post(
+      const response = await api.post(
       `${API_URL}/api/emails/upload-csv`, formData);
       alert("Correos cargados correctamente");
     } catch (error) {

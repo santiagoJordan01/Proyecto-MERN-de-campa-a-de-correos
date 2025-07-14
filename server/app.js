@@ -3,6 +3,7 @@ import cors from 'cors';
 import fileUpload from 'express-fileupload';
 import { config } from 'dotenv';
 import Bull from 'bull';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -18,12 +19,25 @@ import { BullAdapter } from '@bull-board/api/bullAdapter.js';
 import { ExpressAdapter } from '@bull-board/express';
 
 // Ejecutar el worker de envío de correos
-import("../workers/email.worker.js");
+import('../workers/email.worker.js');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// ----------------------
+// Verificar que la carpeta uploads/ exista
+// ----------------------
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadsDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+  console.log("📁 Carpeta 'uploads' creada");
+}
+
+// ----------------------
 // Middleware
+// ----------------------
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -52,7 +66,7 @@ createBullBoard({
 });
 
 // ----------------------
-// Rutas API (deben ir antes del frontend)
+// Rutas API (antes del frontend)
 // ----------------------
 app.use('/api/emails', (req, res, next) => {
   console.log(`📨 [${req.method}] ${req.originalUrl}`);
@@ -64,10 +78,7 @@ app.use('/admin/queues', serverAdapter.getRouter());
 // ----------------------
 // Servir frontend (React)
 // ----------------------
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const clientPath = path.join(__dirname, '..', 'client', 'dist');
-
 app.use(express.static(clientPath));
 
 app.get('*', (req, res) => {
