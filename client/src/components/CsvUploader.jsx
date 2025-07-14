@@ -1,7 +1,5 @@
 import { api } from "../api";
-import axios from "axios";
 import { useState } from "react";
-const API_URL = import.meta.env.VITE_API_URL;
 
 export function CsvUploader() {
   const [file, setFile] = useState(null);
@@ -15,8 +13,11 @@ export function CsvUploader() {
     formData.append("csv", file);
 
     try {
-      const response = await api.post(
-      `${API_URL}/api/emails/upload-csv`, formData);
+      const response = await api.post(`/api/emails/upload-csv`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       alert("Correos cargados correctamente");
     } catch (error) {
       alert("Error al cargar el archivo CSV");

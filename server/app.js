@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import fileUpload from 'express-fileupload';
 import { config } from 'dotenv';
 import Bull from 'bull';
 import fs from 'fs';
@@ -41,7 +40,6 @@ if (!fs.existsSync(uploadsDir)) {
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(fileUpload());
 app.use("/uploads", express.static("uploads"));
 
 // ----------------------
