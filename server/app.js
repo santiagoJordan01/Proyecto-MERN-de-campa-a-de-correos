@@ -1,30 +1,29 @@
 import express from 'express';
 import cors from 'cors';
 import { config } from 'dotenv';
-import Bull from 'bull';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Cargar variables de entorno
-config();
+config(); // Cargar .env
 
 // Rutas y controladores
 import emailRoutes from '../routes/email.routes.js';
 
-// Bull Board para monitoreo
-import { createBullBoard } from '@bull-board/api';
-import { BullAdapter } from '@bull-board/api/bullAdapter.js';
-import { ExpressAdapter } from '@bull-board/express';
-
-// Ejecutar el worker de envío de correos
+// Ejecutar el worker
 import('../workers/email.worker.js');
+
+// BullMQ y Bull Board
+import { Queue } from 'bullmq';
+import { createBullBoard } from '@bull-board/api';
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter.js';
+import { ExpressAdapter } from '@bull-board/express';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // ----------------------
-// Verificar que la carpeta uploads/ exista
+// Verificar carpeta uploads
 // ----------------------
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,38 +42,37 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
 
 // ----------------------
-// Configurar cola Bull
+// Crear cola BullMQ con URL de Redis (Upstash)
 // ----------------------
-const emailQueue = new Bull('email-queue', {
-  redis: {
-    host: process.env.REDIS_HOST || 'localhost',
-    port: process.env.REDIS_PORT || 6379
-  }
+const emailQueue = new Queue('email-queue', {
+  connection: {
+    url: process.env.REDIS_URL // Ejemplo: redis://default:password@upstash.io:6379
+  },
 });
 
 // ----------------------
-// Bull Board (monitor)
+// Bull Board (Dashboard)
 // ----------------------
 const serverAdapter = new ExpressAdapter();
 serverAdapter.setBasePath('/admin/queues');
 
 createBullBoard({
-  queues: [new BullAdapter(emailQueue)],
-  serverAdapter
+  queues: [new BullMQAdapter(emailQueue)],
+  serverAdapter,
 });
 
+app.use('/admin/queues', serverAdapter.getRouter());
+
 // ----------------------
-// Rutas API (antes del frontend)
+// API Routes
 // ----------------------
 app.use('/api/emails', (req, res, next) => {
   console.log(`📨 [${req.method}] ${req.originalUrl}`);
   next();
 }, emailRoutes);
 
-app.use('/admin/queues', serverAdapter.getRouter());
-
 // ----------------------
-// Servir frontend (React)
+// Frontend (React)
 // ----------------------
 const clientPath = path.join(__dirname, '..', 'client', 'dist');
 app.use(express.static(clientPath));
@@ -86,6 +84,6 @@ app.get('*', (req, res) => {
 // ----------------------
 // Iniciar servidor
 // ----------------------
-app.listen(PORT,'0.0.0.0', () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Servidor ejecutándose en http://localhost:${PORT}`);
 });
