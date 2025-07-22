@@ -15,7 +15,7 @@ export const sendCampaign = async (req, res) => {
     const html = await fs.readFile(`templates/${templateName}.html`, "utf8");
 
     for (const row of rows) {
-      await emailQueue.add({
+      await emailQueue.add("sendEmail",{
         email: row.email,
         templateName,
         emailId: row.id,
