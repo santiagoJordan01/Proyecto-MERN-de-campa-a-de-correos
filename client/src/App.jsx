@@ -1,7 +1,22 @@
-import { Home } from "./pages/Home";
+import { Route, Routes } from "react-router-dom";
 
+
+import { Home } from "./pages/Home";
+import "./index.css";
+import Navbar from "./components/navbar";
 function App() {
-  return <Home />;
+  return(
+      <div className="bg-gray-100 min-h-screen">
+        <Navbar />
+
+      <div >
+        <Home />
+      </div>
+
+      </div>
+
+    
+  )
 }
 
 export default App;

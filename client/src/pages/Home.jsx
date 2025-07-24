@@ -7,10 +7,10 @@ export function Home() {
   const [template, setTemplate] = useState("");
 
   return (
-    <div className="max-w-2xl mx-auto p-6 py-4 px-20">
+    <div className="max-w-2xl mx-auto p-6 py-4 px-20 bg-white-500 align">
       <h1 className="text-3xl font-bold mb-4">Gestión de Campañas</h1>
-      <CsvUploader />
-      <TemplateSelector selected={template} onChange={setTemplate} />
+      <div><CsvUploader /></div>
+      <div className="flex"><TemplateSelector selected={template} onChange={setTemplate} /></div>
       <CampaignSender templateName={template} />
     </div>
   );
