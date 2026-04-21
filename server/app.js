@@ -4,7 +4,6 @@ import { config } from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import emailRoutes from '../routes/email.routes.js';
 
 config(); // Cargar .env
 
