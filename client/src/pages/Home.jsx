@@ -2,16 +2,12 @@ import { useState } from "react";
 import { CsvUploader } from "../components/CsvUploader";
 import { TemplateSelector } from "../components/TemplateSelector";
 import { CampaignSender } from "../components/CampaignSender";
-import Navbar from "../components/navbar";
 
 export function Home() {
   const [template, setTemplate] = useState("");
 
   return (
-    <>
-      <Navbar />
-
-      <main className="min-h-screen bg-gradient-to-br from-slate-50 to-white py-12">
+    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-white py-12">
         <div className="mx-auto px-4 max-w-6xl">
           <header className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
