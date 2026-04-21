@@ -7,9 +7,7 @@ function Navbar() {
   return (
     <nav className="bg-neutral-800 text-white px-4 sm:px-8 py-4 flex flex-wrap justify-between items-center shadow-md">
       {/* Título */}
-      <Link to="/" className="font-bold text-lg sm:text-xl">
-        <h1 className="text-center">Gestor de campañas</h1>
-      </Link>
+      
 
       {/* Botón menú móvil */}
       <button
