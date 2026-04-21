@@ -14,8 +14,7 @@ export const uploadCSV = async (req, res) => {
     fs.createReadStream(filePath)
       .pipe(csv())
       .on('data', (data) => {
-        const email = data.email || data.Email || data.EMAIL; // Maneja diferentes capitalizaciones
-        // Validar si el email es válido antes de agregarlo a los resultados
+        const email = data.email || data.Email || data.EMAIL;
         if (email && validateEmail(email)) {
           results.push(email);
         }
@@ -23,9 +22,14 @@ export const uploadCSV = async (req, res) => {
       .on('end', async () => {
         const uniqueEmails = [...new Set(results)];
 
+        // Cambio principal: usar INSERT ... ON CONFLICT en lugar de INSERT IGNORE
+        // Placeholders $1, $2 en lugar de ?
+        // Ajusta el nombre de la columna a 'email' (si tu tabla tiene 'recipient_email', mira la nota abajo)
         for (const email of uniqueEmails) {
           await pool.query(
-            'INSERT IGNORE INTO emails (email, status) VALUES (?, ?)',
+            `INSERT INTO emails (email, status) 
+             VALUES ($1, $2) 
+             ON CONFLICT (email) DO NOTHING`,
             [email, 'pending']
           );
         }
