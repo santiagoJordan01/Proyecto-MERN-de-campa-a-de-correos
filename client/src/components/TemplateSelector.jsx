@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export function TemplateSelector({ selected, onChange }) {
   return (
     <div className="p-4">

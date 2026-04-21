@@ -2,7 +2,6 @@ import { api } from "../api";
 import { useState } from "react";
 
 export function CsvUploader() {
-  const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
 
   const handleUpload = async (event) => {
@@ -13,14 +12,14 @@ export function CsvUploader() {
     formData.append("csv", file);
 
     try {
-      const response = await api.post(`/emails/upload-csv`, formData, {
+      await api.post(`/emails/upload-csv`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      alert("Correos cargados correctamente");
+      setMessage("Correos cargados correctamente");
     } catch (error) {
-      alert("Error al cargar el archivo CSV");
+      setMessage("Error al cargar el archivo CSV");
       console.error(error);
     }
   };
