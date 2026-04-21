@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import emailRoutes from '../routes/email.routes.js';
 
 config(); // Cargar .env
 
@@ -14,7 +15,7 @@ import emailRoutes from '../routes/email.routes.js';
 import('../workers/email.worker.js');
 
 // BullMQ y Bull Board
-import { Queue } from 'bullmq';
+import { emailQueue } from '../queues/email.queue.js';
 import { createBullBoard } from '@bull-board/api';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter.js';
 import { ExpressAdapter } from '@bull-board/express';
@@ -40,15 +41,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
+app.use('/api/emails', emailRoutes);
 
 // ----------------------
-// Crear cola BullMQ con URL de Redis (Upstash)
+// Cola de emails (configurada en queues/email.queue.js)
 // ----------------------
-const emailQueue = new Queue('email-queue', {
-  connection: {
-    url: process.env.REDIS_URL // Ejemplo: redis://default:password@upstash.io:6379
-  },
-});
 
 // ----------------------
 // Bull Board (Dashboard)

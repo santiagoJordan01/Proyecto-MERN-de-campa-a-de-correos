@@ -19,6 +19,8 @@ router.post('/upload-csv', upload.single('csv'), uploadCSV);
 
 router.post('/send-campaign', sendCampaign);
 
-
+router.get('/test', (req, res) => {
+  res.json({ message: 'API is working' });
+});
 
 export default router;

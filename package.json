@@ -9,7 +9,8 @@
     "start": "node server/app.js",
     "build": "cd client && npm install && npm run build",
     "client-install": "cd client && npm install",
-    "client-build": "cd client && npm run build"
+    "client-build": "cd client && npm run build",
+    "postinstall": "cd client && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +29,7 @@
     "multer": "^2.0.1",
     "mysql2": "^3.14.1",
     "nodemailer": "^7.0.3",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "pg": "^8.20.0"
   }
 }
