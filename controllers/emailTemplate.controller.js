@@ -9,7 +9,7 @@ export const sendCampaign = async (req, res) => {
   }
 
   try {
-    const [rows] = await pool.query("SELECT * FROM emails WHERE status = 'pending'");
+    const { rows } = await pool.query("SELECT * FROM emails WHERE status = 'pending'");
     if (!rows.length) return res.json({ message: "No hay correos pendientes" });
 
     const html = await fs.readFile(`templates/${templateName}.html`, "utf8");
